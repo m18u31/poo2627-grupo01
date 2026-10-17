@@ -1,17 +1,18 @@
 package ucam.poo.mision.tripulacion;
 
 public abstract class Tripulante {
-	private String nombre;
-	private String apellido1;
-	private String apellido2;
-	private int anyoNacimiento;
-	private enum especialidad {
+	public enum Especialidad {
 		COMANDANTE,
 		PILOTO,
 		INGENIERO,
 		MEDICO,
 		CIENTIFICO
 	}
+	private String nombre;
+	private String apellido1;
+	private String apellido2;
+	private int anyoNacimiento;
+	private Especialidad especialidad;
 	private String[] necesidades;
 	private Tripulante[] incompatibles;
 	private Tripulante[] preferentes;
@@ -74,6 +75,14 @@ public abstract class Tripulante {
 
 	public void setAnyoNacimiento(int anyoNacimiento) {
 		this.anyoNacimiento = anyoNacimiento;
+	}
+	
+	public Especialidad getEspecialidad() {
+		return especialidad;
+	}
+	
+	public void setEspecialidad(Especialidad especialidad) {
+		this.especialidad = especialidad;
 	}
 
 
@@ -158,23 +167,24 @@ public abstract class Tripulante {
 		Tripulante.numID = numID;
 	}
 
-
-
-
 	public String getPrefijoID() {
 		return prefijoID;
 	}
 
+	public String getId() {
+			
+		return prefijoID.concat(String.valueOf(numID));
+	}
 
 
-
-	public Tripulante(String nombre, String apellido1, String apellido2, int anyoNacimiento, String[] necesidades,
+	public Tripulante(String nombre, String apellido1, String apellido2, int anyoNacimiento, Especialidad especialidad, String[] necesidades,
 			Tripulante[] incompatibles, Tripulante[] preferentes, int horasVuelo, int experienciaComputable) {
 		super();
 		this.nombre = nombre;
 		this.apellido1 = apellido1;
 		this.apellido2 = apellido2;
 		this.anyoNacimiento = anyoNacimiento;
+		this.especialidad = especialidad;
 		this.necesidades = necesidades;
 		this.incompatibles = incompatibles;
 		this.preferentes = preferentes;
@@ -185,9 +195,6 @@ public abstract class Tripulante {
 
 
 
-	public String getId() {
-		
-		return prefijoID.concat(String.valueOf(numID));
-	}
+	
 
 }
