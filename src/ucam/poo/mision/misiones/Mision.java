@@ -58,7 +58,7 @@ public class Mision {
 	}
 	
 	public boolean setTipo(TipoMision tipo) {
-		if(tipo != null) { //!tipo.isBlank() no es necesario porque "" no esta en la enum
+		if(tipo != null) { //!tipo.isBlank() daria error porque "" no esta en la enum
 			this.tipo = tipo;
 			return true;
 		} else {
@@ -94,7 +94,7 @@ public class Mision {
 	}
 
 	public boolean setEstado(EstadoMision estado) {
-		if(estado != null) { //!tipo.isBlank() no es necesario porque "" no esta en la enum
+		if(estado != null) { //!tipo.isBlank() daria error porque "" no esta en la enum
 			this.estado = estado;
 			return true;
 		} else {
