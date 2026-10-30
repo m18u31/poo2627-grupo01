@@ -1,8 +1,12 @@
 package ucam.poo.mision.misiones;
 
+//Importar paquetes necesarios del proyecto
+import java.time.LocalDate; //Para las fechas
 import ucam.poo.mision.flota.*;
+import ucam.poo.mision.tripulacion.*;
 
 public abstract class Mision {
+	//Atributos
 	private String codigo;
 	private String nombre;
 	private TipoMision tipo;
@@ -12,19 +16,20 @@ public abstract class Mision {
 	private EstadoMision estado;
 	private String[] bitacora; //TODO: Falta generar las lineas de bitacora de muchos sucesos
 	private static final int MAX_LINEAS_BITACORA = 100;  //Numero maximo de lineas miestras se use un array (estatico)
-	private int indiceBitacora = 0;
+	private int indiceBitacora = 0; //Apunta por que linea va
 	private double masaTotal;
 	
+	//Constructor
 	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas) {
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.tipo = tipo;
 		this.fechaLanzamiento = fechaLanzamiento;
-		this.cohete = cohete;
-		this.cargas = cargas;
+		this.cohete = cohete; //Del paquete flota
+		this.cargas = cargas; //Del paquete flota
 		this.estado = EstadoMision.planificada;
-		this.bitacora = new String[MAX_LINEAS_BITACORA];
-		lineaBitacora(fechaLanzamiento + ": Misión planificada.");
+		this.bitacora = new String[MAX_LINEAS_BITACORA]; //Bitacora creada
+		lineaBitacora(LocalDate.now() + ": Misión planificada."); //Primera linea
 		
 	}
 	
@@ -141,21 +146,103 @@ public abstract class Mision {
 		if(linea == null || linea.isBlank()) {
 			return false;
 		}
-		this.bitacora[this.indiceBitacora] = linea;
-		indiceBitacora++;
+		this.bitacora[this.indiceBitacora] = linea; //Escribe la entrada en la linea correspondiente
+		indiceBitacora++; //Añade una nueva linea
 		return true;
 	}
 	
 	public double calcularMasaTotal() {
 		int i;
 		double masaTotal=0;
-		for(i=0; i<cargas.length; i++) {
-			if(cargas[i] == null) {
+		for(i=0; i<cargas.length; i++) { //Recorremos las cargas
+			if(cargas[i] == null) { //Con el primer espacio nulo asumimos que ya no hay mas y salimos
 				return masaTotal;
 			}
-			masaTotal = masaTotal + cargas[i].getMasa();
+			masaTotal = masaTotal + cargas[i].getMasa(); //Se van sumando
 		}
 		
 		return masaTotal;
 	}
+	
+	//Metodos de seguridad
+	//1. La masa total de lanzamiento de la misión no supera la capacidad máxima de carga del cohete.
+	public boolean seguridadMasas() {
+		if(this.masaTotal > cohete.getCapacidadCargaMaxima()) {
+			return false;
+		}
+		return true;
+	}
+	
+	//4. No viajan juntos dos astronautas incompatibles.
+	public boolean seguridadIncompatibles() { //TODO: Primero hay que entender como comparar objetos con equals y @Override
+		return true;
+	}
+	
+	//5. El cohete está disponible: no está en mantenimiento, ni retirado, ni asignado a otra misión activa (planificada, lista o lanzada).
+	public boolean seguridadCohete() {
+		if(this.cohete.getEstado() == EstadoCohete.DISPONIBLE) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	//Comprobacion de todo
+	public boolean seguridadTotal() {
+		if(seguridadMasas() && seguridadIncompatibles() && seguridadCohete()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	//Cambios de estado de la mision
+	public boolean misionLista(boolean seguridad) {
+		if(seguridad && this.getEstado() == EstadoMision.planificada) {
+			lineaBitacora(LocalDate.now() + ": Cohete asignado.");
+			this.cohete.setEstado(EstadoCohete.ASIGNADO);
+			lineaBitacora(LocalDate.now() + ": Misión lista.");
+			return this.setEstado(EstadoMision.lista);
+		}
+		return false;
+	}
+	
+	public boolean misionCancelada() {
+		if(this.getEstado() == EstadoMision.planificada) {
+			lineaBitacora(LocalDate.now() + ": Misión cancelada.");
+			return this.setEstado(EstadoMision.cancelada);
+		}
+		if(this.getEstado() == EstadoMision.lista) {
+			lineaBitacora(LocalDate.now() + ":Cohete disponible.");
+			this.cohete.setEstado(EstadoCohete.DISPONIBLE);
+			lineaBitacora(LocalDate.now() + ": Misión cancelada.");
+			return this.setEstado(EstadoMision.cancelada);
+		}
+		return false;
+	}
+	
+	public boolean misionLanzada() {
+		if(this.getEstado() == EstadoMision.lista) {
+			lineaBitacora(LocalDate.now() + ": Misión lanzada.");
+			return this.setEstado(EstadoMision.lanzada);
+		}
+		return false;
+	}
+	
+	public boolean misionCompletada() {
+		if(this.getEstado() == EstadoMision.lanzada) {
+			lineaBitacora(LocalDate.now() + ": Misión completada.");
+			if(this.cohete.isReutilizable()) {
+				lineaBitacora(LocalDate.now() + ":Cohete disponible.");
+				this.cohete.setEstado(EstadoCohete.DISPONIBLE);
+			} else {
+				lineaBitacora(LocalDate.now() + ":Cohete retirado.");
+				this.cohete.setEstado(EstadoCohete.RETIRADO);
+			}
+			
+			return this.setEstado(EstadoMision.completada);
+		}
+		return false;
+	}
+	
 }
