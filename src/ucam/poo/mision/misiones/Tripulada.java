@@ -5,7 +5,7 @@ public class Tripulada extends Mision {
 	
 	public Tripulada (String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas, double masaTotal, String[] tripulacion) {
 		super(codigo, nombre, tipo, fechaLanzamiento, cohete, cargas);
-		copiarTripulacion(tripulacion);
+		this.asignarTripulacion(fechaLanzamiento, tripulacion);
 		this.setMasaTotal(masaTotal);
 	}
 	
@@ -32,11 +32,12 @@ public class Tripulada extends Mision {
 		return contador;
 	}
 	
-	public void copiarTripulacion(String[] tripulacion) {
+	public void asignarTripulacion(String fecha, String[] tripulacion) {
 		int i;
 		for(i=0; i<tripulacion.length; i++) {
 			this.tripulacion[i] = tripulacion[i];
 		}
+		this.lineaBitacora(fecha + ": Tripulación asignada.");
 	}
 	
 }

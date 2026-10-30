@@ -8,7 +8,9 @@ public abstract class Mision {
 	private String cohete;
 	private String cargas;
 	private EstadoMision estado;
-	private String[] bitacora; //TODO: Pendiente de planificar
+	private String[] bitacora; //TODO: Falta generar las lineas de bitacora de muchos sucesos
+	private static final int MAX_LINEAS_BITACORA = 100;  //Numero maximo de lineas miestras se use un array (estatico)
+	private int indiceBitacora = 0;
 	private double masaTotal;
 	
 	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas) {
@@ -19,6 +21,9 @@ public abstract class Mision {
 		this.cohete = cohete;
 		this.cargas = cargas;
 		this.estado = EstadoMision.planificada;
+		this.bitacora = new String[MAX_LINEAS_BITACORA];
+		lineaBitacora(fechaLanzamiento + ": Misión planificada.");
+		
 	}
 	
 	//Getters
@@ -52,6 +57,10 @@ public abstract class Mision {
 	
 	public double getMasaTotal() {
 		return this.masaTotal;
+	}
+	
+	public String[] getBitacora() {
+		return this.bitacora;
 	}
 	
 	//Setters
@@ -120,6 +129,15 @@ public abstract class Mision {
 	
 	public boolean setMasaTotal(double masaTotal) {
 		this.masaTotal = masaTotal;
+		return true;
+	}
+	
+	public boolean lineaBitacora(String linea) {
+		if(linea == null || linea.isBlank()) {
+			return false;
+		}
+		this.bitacora[this.indiceBitacora] = linea;
+		indiceBitacora++;
 		return true;
 	}
 	
