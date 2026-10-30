@@ -1,9 +1,11 @@
 package ucam.poo.mision.misiones;
 
+import ucam.poo.mision.flota.*;
+
 public class NoTripulada extends Mision {
 	private String centroControl;
 	
-	public NoTripulada(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas, String centroControl, double masaTotal) {
+	public NoTripulada(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, String centroControl, double masaTotal) {
 		super(codigo, nombre, tipo, fechaLanzamiento, cohete, cargas);
 		this.centroControl = centroControl;
 		this.setMasaTotal(masaTotal);

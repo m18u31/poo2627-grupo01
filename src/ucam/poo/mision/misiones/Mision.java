@@ -1,19 +1,21 @@
 package ucam.poo.mision.misiones;
 
+import ucam.poo.mision.flota.*;
+
 public abstract class Mision {
 	private String codigo;
 	private String nombre;
 	private TipoMision tipo;
 	private String fechaLanzamiento;
-	private String cohete;
-	private String cargas;
+	private Cohete cohete;
+	private CargaUtil[] cargas;
 	private EstadoMision estado;
 	private String[] bitacora; //TODO: Falta generar las lineas de bitacora de muchos sucesos
 	private static final int MAX_LINEAS_BITACORA = 100;  //Numero maximo de lineas miestras se use un array (estatico)
 	private int indiceBitacora = 0;
 	private double masaTotal;
 	
-	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas) {
+	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas) {
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.tipo = tipo;
@@ -43,11 +45,11 @@ public abstract class Mision {
 		return this.fechaLanzamiento;
 	}
 	
-	public String getCohete() {
+	public Cohete getCohete() {
 		return this.cohete;
 	}
 	
-	public String getCargas() {
+	public CargaUtil[] getCargas() {
 		return this.cargas;
 	}
 	
@@ -100,8 +102,8 @@ public abstract class Mision {
 		}
 	}
 	
-	public boolean setCohete(String cohete) {
-		if(cohete != null && !cohete.isBlank()) {
+	public boolean setCohete(Cohete cohete) {
+		if(cohete != null) {
 			this.cohete = cohete;
 			return true;
 		} else {
@@ -109,8 +111,8 @@ public abstract class Mision {
 		}
 	}
 
-	public boolean setCargas(String cargas) {
-		if(cargas != null && !cargas.isBlank()) {
+	public boolean setCargas(CargaUtil[] cargas) {
+		if(cargas != null) {
 			this.cargas = cargas;
 			return true;
 		} else {

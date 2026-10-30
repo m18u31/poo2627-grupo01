@@ -1,9 +1,11 @@
 package ucam.poo.mision.misiones;
 
+import ucam.poo.mision.flota.*;
+
 public class Tripulada extends Mision {
 	private String[] tripulacion;
 	
-	public Tripulada (String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas, double masaTotal, String[] tripulacion) {
+	public Tripulada (String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, double masaTotal, String[] tripulacion) {
 		super(codigo, nombre, tipo, fechaLanzamiento, cohete, cargas);
 		this.asignarTripulacion(fechaLanzamiento, tripulacion);
 		this.setMasaTotal(masaTotal);
@@ -33,10 +35,7 @@ public class Tripulada extends Mision {
 	}
 	
 	public void asignarTripulacion(String fecha, String[] tripulacion) {
-		int i;
-		for(i=0; i<tripulacion.length; i++) {
-			this.tripulacion[i] = tripulacion[i];
-		}
+		this.tripulacion = tripulacion;
 		this.lineaBitacora(fecha + ": Tripulación asignada.");
 	}
 	
