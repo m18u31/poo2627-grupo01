@@ -9,6 +9,16 @@ public class Mision {
 	private String cargas;
 	private EstadoMision estado;
 	
+	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas, EstadoMision estado) {
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.tipo = tipo;
+		this.fechaLanzamiento = fechaLanzamiento;
+		this.cohete = cohete;
+		this.cargas = cargas;
+		this.estado = estado;
+	}
+	
 	//Getters
 	public String getCodigo() {
 		return this.codigo;
