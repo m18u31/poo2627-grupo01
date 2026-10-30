@@ -8,15 +8,16 @@ public class Mision {
 	private String cohete;
 	private String cargas;
 	private EstadoMision estado;
+	private String[] bitacora; //TODO: Pendiente de planificar
 	
-	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas, EstadoMision estado) {
+	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas) {
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.tipo = tipo;
 		this.fechaLanzamiento = fechaLanzamiento;
 		this.cohete = cohete;
 		this.cargas = cargas;
-		this.estado = estado;
+		this.estado = EstadoMision.planificada;
 	}
 	
 	//Getters
