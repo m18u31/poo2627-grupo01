@@ -8,7 +8,7 @@ public class NoTripulada extends Mision {
 	public NoTripulada(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, String centroControl, double masaTotal) {
 		super(codigo, nombre, tipo, fechaLanzamiento, cohete, cargas);
 		this.centroControl = centroControl;
-		this.setMasaTotal(masaTotal);
+		this.setMasaTotal(this.calcularMasaTotal());
 	}
 	
 	public String getCentroControl() {
@@ -20,14 +20,6 @@ public class NoTripulada extends Mision {
 		}
 		this.centroControl = centroControl;
 		return true;
-	}
-	
-	@Override
-	public boolean setMasaTotal(double masaTotal) {
-		if(masaTotal<0) {
-			return false;
-		}
-		return super.setMasaTotal(masaTotal);
 	}
 	
 }

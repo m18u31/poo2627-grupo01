@@ -130,6 +130,9 @@ public abstract class Mision {
 	}
 	
 	public boolean setMasaTotal(double masaTotal) {
+		if(masaTotal < 0) {
+			return false;
+		}
 		this.masaTotal = masaTotal;
 		return true;
 	}
@@ -143,5 +146,16 @@ public abstract class Mision {
 		return true;
 	}
 	
-	
+	public double calcularMasaTotal() {
+		int i;
+		double masaTotal=0;
+		for(i=0; i<cargas.length; i++) {
+			if(cargas[i] == null) {
+				return masaTotal;
+			}
+			masaTotal = masaTotal + cargas[i].getMasa();
+		}
+		
+		return masaTotal;
+	}
 }

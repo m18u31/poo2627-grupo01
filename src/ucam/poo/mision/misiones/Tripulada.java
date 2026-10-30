@@ -8,15 +8,12 @@ public class Tripulada extends Mision {
 	public Tripulada (String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, double masaTotal, String[] tripulacion) {
 		super(codigo, nombre, tipo, fechaLanzamiento, cohete, cargas);
 		this.asignarTripulacion(fechaLanzamiento, tripulacion);
-		this.setMasaTotal(masaTotal);
+		this.setMasaTotal(this.calcularMasaTotal());
 	}
 	
 	@Override
-	public boolean setMasaTotal(double masaTotal) {
-		if(masaTotal<0) {
-			return false;
-		}
-		return super.setMasaTotal(masaTotal + calculaNumAstronautas(tripulacion) * 120);
+	public double calcularMasaTotal() {
+		return super.calcularMasaTotal() + calculaNumAstronautas(tripulacion) * 120;
 	}
 	
 	public int calculaNumAstronautas(String[] tripulacion) {
