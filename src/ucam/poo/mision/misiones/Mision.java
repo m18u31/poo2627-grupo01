@@ -1,6 +1,6 @@
 package ucam.poo.mision.misiones;
 
-public class Mision {
+public abstract class Mision {
 	private String codigo;
 	private String nombre;
 	private TipoMision tipo;
@@ -9,6 +9,7 @@ public class Mision {
 	private String cargas;
 	private EstadoMision estado;
 	private String[] bitacora; //TODO: Pendiente de planificar
+	private double masaTotal;
 	
 	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, String cohete, String cargas) {
 		this.codigo = codigo;
@@ -47,6 +48,10 @@ public class Mision {
 	
 	public EstadoMision getEstado() {
 		return this.estado;
+	}
+	
+	public double getMasaTotal() {
+		return this.masaTotal;
 	}
 	
 	//Setters
@@ -112,5 +117,11 @@ public class Mision {
 			return false;
 		}
 	}
+	
+	public boolean setMasaTotal(double masaTotal) {
+		this.masaTotal = masaTotal;
+		return true;
+	}
+	
 	
 }
