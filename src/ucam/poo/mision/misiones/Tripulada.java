@@ -1,32 +1,35 @@
 package ucam.poo.mision.misiones;
 
-//Importar paquetes necesarios del proyecto
+//Importar paquetes necesarios del proyecto o externos
 import java.time.LocalDate; //Para las fechas
 import ucam.poo.mision.flota.*;
 import ucam.poo.mision.tripulacion.*;
 import ucam.poo.mision.tripulacion.Tripulante.Especialidad;
 
 public class Tripulada extends Mision {
+	//Atributos
 	private Tripulante[] tripulacion;
 	
 	public Tripulada (String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, double masaTotal, Tripulante[] tripulacion) {
 		super(codigo, nombre, tipo, fechaLanzamiento, cohete, cargas);
 		this.asignarTripulacion(tripulacion);
-		this.setMasaTotal(this.calcularMasaTotal());
+		this.setMasaTotal(this.calcularMasaTotal()); //Calculo de masas propio sobrescrito con @Override
 	}
 	
+	//Calculo de masas propio sobrescrito con @Override
 	@Override
 	public double calcularMasaTotal() {
 		return super.calcularMasaTotal() + calculaNumAstronautas(tripulacion) * 120;
 	}
 	
+	//Calcular el numero de astronautas asignados a la mision
 	public int calculaNumAstronautas(Tripulante[] tripulacion) {
 		if(tripulacion == null) {
 			return 0;
 		}
 		
 		int i, contador=0;
-		for(i=0; i<tripulacion.length; i++){
+		for(i=0; i<tripulacion.length; i++){ //Recorremos y sumamos
 			if(tripulacion[i] == null) {
 				return contador;
 			}
@@ -35,9 +38,10 @@ public class Tripulada extends Mision {
 		return contador;
 	}
 	
+	//Asignacion de tripulacion
 	public void asignarTripulacion(Tripulante[] tripulacion) {
 		this.tripulacion = tripulacion;
-		this.lineaBitacora(LocalDate.now() + ": Tripulación asignada.");
+		this.lineaBitacora(LocalDate.now() + ": Tripulación asignada."); //Bitacora
 	}
 	
 	//Metodos de seguridad
@@ -95,9 +99,10 @@ public class Tripulada extends Mision {
 		return false;
 	}
 	
-	//Comprobacion de todo
+	//Comprobacion propia de todo sobrescrita con @Override
 	@Override
 	public boolean seguridadTotal() {
+		//A lo comprobado en Mision, le añadimos tres sistemas de seguridad propios de Tripulada
 		if(super.seguridadTotal() && seguridadAforo() && seguridadComPil() && seguridadMedico()) {
 			return true;
 		}

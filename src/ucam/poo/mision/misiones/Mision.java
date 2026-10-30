@@ -1,9 +1,8 @@
 package ucam.poo.mision.misiones;
 
-//Importar paquetes necesarios del proyecto
+//Importar paquetes necesarios del proyecto o externos
 import java.time.LocalDate; //Para las fechas
 import ucam.poo.mision.flota.*;
-import ucam.poo.mision.tripulacion.*;
 
 public abstract class Mision {
 	//Atributos
@@ -14,7 +13,7 @@ public abstract class Mision {
 	private Cohete cohete;
 	private CargaUtil[] cargas;
 	private EstadoMision estado;
-	private String[] bitacora; //TODO: Falta generar las lineas de bitacora de muchos sucesos
+	private String[] bitacora;
 	private static final int MAX_LINEAS_BITACORA = 100;  //Numero maximo de lineas miestras se use un array (estatico)
 	private int indiceBitacora = 0; //Apunta por que linea va
 	private double masaTotal;
@@ -198,51 +197,51 @@ public abstract class Mision {
 	
 	//Cambios de estado de la mision
 	public boolean misionLista(boolean seguridad) {
-		if(seguridad && this.getEstado() == EstadoMision.planificada) {
-			lineaBitacora(LocalDate.now() + ": Cohete asignado.");
-			this.cohete.setEstado(EstadoCohete.ASIGNADO);
-			lineaBitacora(LocalDate.now() + ": Misión lista.");
-			return this.setEstado(EstadoMision.lista);
+		if(seguridad && this.getEstado() == EstadoMision.planificada) { //Solo una mision planificada y que cumpla las medidas de seguridad puede pasar a lista
+			lineaBitacora(LocalDate.now() + ": Cohete asignado."); //Bitacora
+			this.cohete.setEstado(EstadoCohete.ASIGNADO); //Cohete asignado
+			lineaBitacora(LocalDate.now() + ": Misión lista."); //Bitacora
+			return this.setEstado(EstadoMision.lista); //Mision lista
 		}
-		return false;
+		return false; //Fallo
 	}
 	
 	public boolean misionCancelada() {
-		if(this.getEstado() == EstadoMision.planificada) {
-			lineaBitacora(LocalDate.now() + ": Misión cancelada.");
-			return this.setEstado(EstadoMision.cancelada);
+		if(this.getEstado() == EstadoMision.planificada) { //Una mision planificada puede ser cancelada
+			lineaBitacora(LocalDate.now() + ": Misión cancelada."); //Bitacora
+			return this.setEstado(EstadoMision.cancelada); //Mision cancelada
 		}
-		if(this.getEstado() == EstadoMision.lista) {
-			lineaBitacora(LocalDate.now() + ":Cohete disponible.");
-			this.cohete.setEstado(EstadoCohete.DISPONIBLE);
-			lineaBitacora(LocalDate.now() + ": Misión cancelada.");
-			return this.setEstado(EstadoMision.cancelada);
+		if(this.getEstado() == EstadoMision.lista) { //Una mision lista puede ser cancelada
+			lineaBitacora(LocalDate.now() + ":Cohete disponible."); //Bitacora
+			this.cohete.setEstado(EstadoCohete.DISPONIBLE); //Cohete disponible
+			lineaBitacora(LocalDate.now() + ": Misión cancelada."); //Bitacora
+			return this.setEstado(EstadoMision.cancelada); //Mision cancelada
 		}
-		return false;
+		return false; //Fallo
 	}
 	
 	public boolean misionLanzada() {
-		if(this.getEstado() == EstadoMision.lista) {
-			lineaBitacora(LocalDate.now() + ": Misión lanzada.");
-			return this.setEstado(EstadoMision.lanzada);
+		if(this.getEstado() == EstadoMision.lista) { //Solo una mision lista puede ser lanzada
+			lineaBitacora(LocalDate.now() + ": Misión lanzada."); //Bitacora
+			return this.setEstado(EstadoMision.lanzada); //Mision lanzada
 		}
-		return false;
+		return false; //Fallo
 	}
 	
 	public boolean misionCompletada() {
-		if(this.getEstado() == EstadoMision.lanzada) {
-			lineaBitacora(LocalDate.now() + ": Misión completada.");
+		if(this.getEstado() == EstadoMision.lanzada) { //Solo una miion lanzada puede ser completada
+			lineaBitacora(LocalDate.now() + ": Misión completada."); //Bitacora
 			if(this.cohete.isReutilizable()) {
-				lineaBitacora(LocalDate.now() + ":Cohete disponible.");
-				this.cohete.setEstado(EstadoCohete.DISPONIBLE);
+				lineaBitacora(LocalDate.now() + ":Cohete disponible."); //Bitacora
+				this.cohete.setEstado(EstadoCohete.DISPONIBLE); //Como el cohete es reutilizable, lo ponemos disponible.
 			} else {
-				lineaBitacora(LocalDate.now() + ":Cohete retirado.");
-				this.cohete.setEstado(EstadoCohete.RETIRADO);
+				lineaBitacora(LocalDate.now() + ":Cohete retirado."); //Bitacora
+				this.cohete.setEstado(EstadoCohete.RETIRADO); //Como el cohete no es reutilizable, lo retiramos.
 			}
 			
-			return this.setEstado(EstadoMision.completada);
+			return this.setEstado(EstadoMision.completada); //Mision completada
 		}
-		return false;
+		return false; //Fallo
 	}
 	
 }
