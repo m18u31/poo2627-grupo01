@@ -154,8 +154,8 @@ public abstract class Mision {
 		int i;
 		double masaTotal=0;
 		for(i=0; i<cargas.length; i++) { //Recorremos las cargas
-			if(cargas[i] == null) { //Con el primer espacio nulo asumimos que ya no hay mas y salimos
-				return masaTotal;
+			if(cargas[i] == null) { //Si no hay carga, se salta la iteracion
+				continue;
 			}
 			masaTotal = masaTotal + cargas[i].getMasa(); //Se van sumando
 		}
@@ -172,11 +172,6 @@ public abstract class Mision {
 		return true;
 	}
 	
-	//4. No viajan juntos dos astronautas incompatibles.
-	public boolean seguridadIncompatibles() { //TODO: Primero hay que entender como comparar objetos con equals y @Override
-		return true;
-	}
-	
 	//5. El cohete está disponible: no está en mantenimiento, ni retirado, ni asignado a otra misión activa (planificada, lista o lanzada).
 	public boolean seguridadCohete() {
 		if(this.cohete.getEstado() == EstadoCohete.DISPONIBLE) {
@@ -188,7 +183,7 @@ public abstract class Mision {
 	
 	//Comprobacion de todo
 	public boolean seguridadTotal() {
-		if(seguridadMasas() && seguridadIncompatibles() && seguridadCohete()) {
+		if(seguridadMasas() && seguridadCohete()) {
 			return true;
 		}
 		

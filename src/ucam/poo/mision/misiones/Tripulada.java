@@ -31,7 +31,7 @@ public class Tripulada extends Mision {
 		int i, contador=0;
 		for(i=0; i<tripulacion.length; i++){ //Recorremos y sumamos
 			if(tripulacion[i] == null) {
-				return contador;
+				continue;
 			}
 			contador++;
 		}
@@ -64,6 +64,9 @@ public class Tripulada extends Mision {
 		
 		int i, coms=0, pils=0;
 		for(i=0; i<tripulacion.length; i++) {
+			if(tripulacion[i] == null) {
+				continue;
+			}
 			if(this.tripulacion[i].getEspecialidad() == Especialidad.COMANDANTE) {
 				coms++;
 			}
@@ -79,6 +82,68 @@ public class Tripulada extends Mision {
 		return false;
 	}
 	
+	//4. No viajan juntos dos astronautas incompatibles.
+	public boolean seguridadIncompatibles() { //TODO: Primero hay que entender como comparar objetos con equals y @Override
+		if(this.tripulacion == null) {
+			return false;
+		}
+		
+		if(listarIncompatibles() == null) {
+			return true;
+		}
+		
+		int i, j;
+		for(i=0; i<this.tripulacion.length; i++) {
+			for(j=0; j<listarIncompatibles().length; j++) {
+				if(tripulacion[i].equals(listarIncompatibles()[j])) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	
+	
+	public Tripulante[] listarIncompatibles() {
+		if(this.tripulacion == null) {
+			return null;
+		}
+		
+		Tripulante[] incompatibles = new Tripulante[contarIncompatibles()];
+		int i, j, contador=0;
+		for(i=0; i<tripulacion.length; i++) {
+			if(tripulacion[i] == null || tripulacion[i].getIncompatibles() == null) {
+				continue;
+			}
+			
+			for(j=0; j<tripulacion[i].getIncompatibles().length; j++) {
+				if(tripulacion[i].getIncompatibles()[j] == null) {
+					continue;
+				}
+				incompatibles[contador] = tripulacion[i].getIncompatibles()[j];
+				contador++;
+			}
+		}
+		
+		return incompatibles;
+	}
+	
+	public int contarIncompatibles() {
+		if(this.tripulacion == null) {
+			return 0;
+		}
+		
+		int i, contador=0;
+		for(i=0; i<this.tripulacion.length; i++) {
+			if(tripulacion[i] == null) {
+				continue;
+			}
+			contador = contador + tripulacion[i].getIncompatibles().length;
+		}
+		return contador;
+	}
+	
 	//6. Toda misión tripulada incluye al menos un médico.
 	public boolean seguridadMedico() {
 		if(this.tripulacion == null) {
@@ -87,6 +152,9 @@ public class Tripulada extends Mision {
 			
 		int i, medicos=0;
 		for(i=0; i<tripulacion.length; i++) {
+			if(tripulacion[i] == null) {
+				continue;
+			}
 			if(this.tripulacion[i].getEspecialidad() == Especialidad.MEDICO) {
 				medicos++;
 			}
@@ -103,7 +171,7 @@ public class Tripulada extends Mision {
 	@Override
 	public boolean seguridadTotal() {
 		//A lo comprobado en Mision, le añadimos tres sistemas de seguridad propios de Tripulada
-		if(super.seguridadTotal() && seguridadAforo() && seguridadComPil() && seguridadMedico()) {
+		if(super.seguridadTotal() && seguridadAforo() && seguridadComPil() && seguridadIncompatibles() && seguridadMedico()) {
 			return true;
 		}
 		
