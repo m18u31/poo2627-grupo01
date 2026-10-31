@@ -179,7 +179,7 @@ public abstract class Tripulante {
 
 
 	public Tripulante(String nombre, String apellido1, String apellido2, int anyoNacimiento, Especialidad especialidad, String[] necesidades,
-			Tripulante[] incompatibles, Tripulante[] preferentes, int horasVuelo, int experienciaComputable) {
+			Tripulante[] incompatibles, Tripulante[] preferentes, int horasVuelo) {
 		super();
 		this.nombre = nombre;
 		this.apellido1 = apellido1;
@@ -190,7 +190,7 @@ public abstract class Tripulante {
 		this.incompatibles = incompatibles;
 		this.preferentes = preferentes;
 		this.horasVuelo = horasVuelo;
-		this.experienciaComputable = experienciaComputable;
+		
 	}
 
 
