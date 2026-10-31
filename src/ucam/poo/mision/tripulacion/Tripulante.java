@@ -21,6 +21,7 @@ public abstract class Tripulante {
 	private int experienciaComputable;
 	private final String prefijoID = "AST-";
 	private static int numID=0;
+	private String id;
 	
 		
 	
@@ -40,7 +41,8 @@ public abstract class Tripulante {
 
 
 	public String getApellido1() {
-		return apellido1;
+		if (apellido1 == null) return "";
+		else return apellido1;
 	}
 
 
@@ -54,7 +56,9 @@ public abstract class Tripulante {
 
 
 	public String getApellido2() {
-		return apellido2;
+		if (apellido2 == null)return "";
+		else 
+			return apellido2;
 	}
 
 
@@ -157,15 +161,15 @@ public abstract class Tripulante {
 
 
 
-	public static int getNumID() {
-		return numID;
+	public String getID() {
+		return id;
 	}
 
 
 
 
-	public static void setNumID(int numID) {
-		Tripulante.numID = numID;
+	private void setID() {
+		id = prefijoID + numID;
 	}
 
 	public String getPrefijoID() {
@@ -174,7 +178,7 @@ public abstract class Tripulante {
 
 	public String getId() {
 			
-		return prefijoID.concat(String.valueOf(numID));
+		return this.id;
 	}
 
 
@@ -190,6 +194,8 @@ public abstract class Tripulante {
 		this.incompatibles = incompatibles;
 		this.preferentes = preferentes;
 		this.horasVuelo = horasVuelo;
+		this.setID();
+		numID++;
 		
 	}
 
