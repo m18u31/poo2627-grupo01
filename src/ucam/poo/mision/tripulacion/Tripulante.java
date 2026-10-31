@@ -1,6 +1,7 @@
 package ucam.poo.mision.tripulacion;
 
 public abstract class Tripulante {
+	// Declaramos la especialidad como enumeración
 	public enum Especialidad {
 		COMANDANTE,
 		PILOTO,
