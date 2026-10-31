@@ -10,7 +10,7 @@ public class NoTripulada extends Mision {
 	private String centroControl;
 	
 	//Constructor
-	public NoTripulada(String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, String centroControl, double masaTotal) {
+	public NoTripulada(String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, String centroControl) {
 		super(nombre, tipo, fechaLanzamiento, cohete, cargas);
 		this.setCentroControl(centroControl);
 		this.setMasaTotal(this.calcularMasaTotal()); //Calculo de masas de la clase Mision
