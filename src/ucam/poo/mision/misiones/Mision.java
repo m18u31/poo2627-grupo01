@@ -17,10 +17,13 @@ public abstract class Mision {
 	private static final int MAX_LINEAS_BITACORA = 100;  //Numero maximo de lineas miestras se use un array (estatico)
 	private int indiceBitacora = 0; //Apunta por que linea va
 	private double masaTotal;
+	private final String prefijoCodigo = "MIS-";
+	private static int numCodigo=0;
 	
 	//Constructor
-	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas) {
-		this.codigo = codigo;
+	public Mision(String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas) {
+		this.setCodigo();
+		numCodigo++;
 		this.nombre = nombre;
 		this.tipo = tipo;
 		this.fechaLanzamiento = fechaLanzamiento;
@@ -29,7 +32,6 @@ public abstract class Mision {
 		this.estado = EstadoMision.planificada;
 		this.bitacora = new String[MAX_LINEAS_BITACORA]; //Bitacora creada
 		lineaBitacora(LocalDate.now() + ": Misión planificada."); //Primera linea
-		
 	}
 	
 	//Getters
@@ -70,13 +72,9 @@ public abstract class Mision {
 	}
 	
 	//Setters
-	public boolean setCodigo(String codigo) {
-		if(codigo != null && !codigo.isBlank()) {
-			this.codigo = codigo;
-			return true;
-		} else {
-			return false;
-		}
+	public boolean setCodigo() {
+		this.codigo = this.prefijoCodigo + numCodigo;
+		return true;
 	}
 	
 	public boolean setNombre(String nombre) {

@@ -10,8 +10,8 @@ public class Tripulada extends Mision {
 	//Atributos
 	private Tripulante[] tripulacion;
 	
-	public Tripulada (String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, double masaTotal, Tripulante[] tripulacion) {
-		super(codigo, nombre, tipo, fechaLanzamiento, cohete, cargas);
+	public Tripulada (String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, double masaTotal, Tripulante[] tripulacion) {
+		super(nombre, tipo, fechaLanzamiento, cohete, cargas);
 		this.asignarTripulacion(tripulacion);
 		this.setMasaTotal(this.calcularMasaTotal()); //Calculo de masas propio sobrescrito con @Override
 	}
@@ -102,8 +102,6 @@ public class Tripulada extends Mision {
 		}
 		return true;
 	}
-	
-	
 	
 	public Tripulante[] listarIncompatibles() {
 		if(this.tripulacion == null) {
