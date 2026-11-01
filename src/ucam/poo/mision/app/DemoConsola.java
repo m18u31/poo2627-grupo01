@@ -1,11 +1,8 @@
 package ucam.poo.mision.app;
 
-<<<<<<< Updated upstream
 import ucam.poo.mision.flota.*;
 import ucam.poo.mision.misiones.*;
 import ucam.poo.mision.tripulacion.*;
-=======
->>>>>>> Stashed changes
 
 public class DemoConsola {
 	
@@ -40,10 +37,10 @@ public class DemoConsola {
 	
 	//Metodo para generar listas de cargas
 	public static CargaUtil[] listasCargas(int opcion) {
-		Satelite satelite = new Satelite("SAT-00", "Satelite", 2623.0, 3469.0);
-		Sonda sonda = new Sonda("SON-00", "Sonda", 750.0, 104.0, "Luna");
-		ModuloHabitable moduloHabitable = new ModuloHabitable("MHA-00", "Modulo Habitable N4", 1400.0, 4);
-		Rover rover = new Rover("ROV-00", "Rover", 953.3, 71.7);
+		Satelite satelite = new Satelite("Satelite", 2623.0, 3469.0);
+		Sonda sonda = new Sonda("Sonda", 750.0, 104.0, "Luna");
+		ModuloHabitable moduloHabitable = new ModuloHabitable("Modulo Habitable N4", 1400.0, 4);
+		Rover rover = new Rover("Rover", 953.3, 71.7);
 		
 		switch (opcion) {
 			case 1: //Nada
@@ -63,12 +60,11 @@ public class DemoConsola {
 	
 	public static void main(String[] args) {
 		
-<<<<<<< Updated upstream
 		int i;
 		
-		Cohete cohete1 = new Cohete("SLS-00", "Delta IV", 1500.0, 3, false);
-		Cohete cohete2 = new Cohete("SLS-01", "Atlas V", 5000.0, 3, false);
-		Cohete cohete3 = new Cohete("SLS-02", "Starship", 11000.0, 4, true);
+		Cohete cohete1 = new Cohete("Delta IV", 1500.0, 3, false);
+		Cohete cohete2 = new Cohete("Atlas V", 5000.0, 3, false);
+		Cohete cohete3 = new Cohete("Starship", 11000.0, 4, true);
 		
 		//MISION 1
 		System.out.println("-----MISION 1-----");
@@ -174,7 +170,5 @@ public class DemoConsola {
 			}
 			System.out.println(rocky6.getBitacora()[i]);
 		}
-=======
->>>>>>> Stashed changes
 	}
 }
