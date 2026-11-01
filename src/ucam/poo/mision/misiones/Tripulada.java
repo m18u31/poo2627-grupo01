@@ -39,18 +39,21 @@ public class Tripulada extends Mision {
 	}
 	
 	//Asignacion de tripulacion
-	public void asignarTripulacion(Tripulante[] tripulacion) {
+	public boolean asignarTripulacion(Tripulante[] tripulacion) {
 		this.tripulacion = tripulacion;
 		this.lineaBitacora(LocalDate.now() + ": Tripulación asignada."); //Bitacora
+		return true;
 	}
 	
 	//Metodos de seguridad
 	//2. En una misión tripulada, el número de astronautas no supera las plazas del cohete.
 	public boolean seguridadAforo() {
 		if(this.tripulacion == null) {
+			lineaBitacora(LocalDate.now() + ": (Seguridad) Tripulación no asignada."); //Bitacora
 			return false;
 		}
 		if(this.calculaNumAstronautas(this.tripulacion) > this.getCohete().getPlazas()) {
+			lineaBitacora(LocalDate.now() + ": (Seguridad) Exceso de tripulación."); //Bitacora
 			return false;
 		}
 		return true;
@@ -78,7 +81,7 @@ public class Tripulada extends Mision {
 		if(coms>0 && pils>0) {
 			return true;
 		}
-		
+		lineaBitacora(LocalDate.now() + ": (Seguridad) Faltan comandantes o pilotos."); //Bitacora
 		return false;
 	}
 	
@@ -96,6 +99,7 @@ public class Tripulada extends Mision {
 		for(i=0; i<this.tripulacion.length; i++) {
 			for(j=0; j<listarIncompatibles().length; j++) {
 				if(tripulacion[i].equals(listarIncompatibles()[j])) {
+					lineaBitacora(LocalDate.now() + ": (Seguridad) Existen incompatibilidades en la tripulación."); //Bitacora
 					return false;
 				}
 			}
@@ -134,7 +138,7 @@ public class Tripulada extends Mision {
 		
 		int i, contador=0;
 		for(i=0; i<this.tripulacion.length; i++) {
-			if(tripulacion[i] == null) {
+			if(tripulacion[i] == null || tripulacion[i].getIncompatibles() == null) {
 				continue;
 			}
 			contador = contador + tripulacion[i].getIncompatibles().length;
@@ -161,7 +165,7 @@ public class Tripulada extends Mision {
 		if(medicos>0) {
 			return true;
 		}
-		
+		lineaBitacora(LocalDate.now() + ": (Seguridad) Falta un medico."); //Bitacora
 		return false;
 	}
 	

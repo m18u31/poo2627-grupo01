@@ -149,13 +149,16 @@ public abstract class Mision {
 	}
 	
 	public double calcularMasaTotal() {
+		if(this.cargas == null) {
+			return 0.0;
+		}
 		int i;
 		double masaTotal=0;
-		for(i=0; i<cargas.length; i++) { //Recorremos las cargas
-			if(cargas[i] == null) { //Si no hay carga, se salta la iteracion
+		for(i=0; i<this.cargas.length; i++) { //Recorremos las cargas
+			if(this.cargas[i] == null) { //Si no hay carga, se salta la iteracion
 				continue;
 			}
-			masaTotal = masaTotal + cargas[i].getMasa(); //Se van sumando
+			masaTotal = masaTotal + this.cargas[i].getMasa(); //Se van sumando
 		}
 		
 		return masaTotal;
@@ -165,6 +168,7 @@ public abstract class Mision {
 	//1. La masa total de lanzamiento de la misión no supera la capacidad máxima de carga del cohete.
 	public boolean seguridadMasas() {
 		if(this.masaTotal > cohete.getCapacidadCargaMaxima()) {
+			lineaBitacora(LocalDate.now() + ": (Seguridad) Exceso de masa."); //Bitacora
 			return false;
 		}
 		return true;
@@ -175,7 +179,7 @@ public abstract class Mision {
 		if(this.cohete.getEstado() == EstadoCohete.DISPONIBLE) {
 			return true;
 		}
-		
+		lineaBitacora(LocalDate.now() + ": (Seguridad) Cohete no disponible."); //Bitacora
 		return false;
 	}
 	
@@ -205,7 +209,7 @@ public abstract class Mision {
 			return this.setEstado(EstadoMision.cancelada); //Mision cancelada
 		}
 		if(this.getEstado() == EstadoMision.lista) { //Una mision lista puede ser cancelada
-			lineaBitacora(LocalDate.now() + ":Cohete disponible."); //Bitacora
+			lineaBitacora(LocalDate.now() + ": Cohete disponible."); //Bitacora
 			this.cohete.setEstado(EstadoCohete.DISPONIBLE); //Cohete disponible
 			lineaBitacora(LocalDate.now() + ": Misión cancelada."); //Bitacora
 			return this.setEstado(EstadoMision.cancelada); //Mision cancelada
@@ -225,10 +229,10 @@ public abstract class Mision {
 		if(this.getEstado() == EstadoMision.lanzada) { //Solo una miion lanzada puede ser completada
 			lineaBitacora(LocalDate.now() + ": Misión completada."); //Bitacora
 			if(this.cohete.isReutilizable()) {
-				lineaBitacora(LocalDate.now() + ":Cohete disponible."); //Bitacora
+				lineaBitacora(LocalDate.now() + ": Cohete disponible."); //Bitacora
 				this.cohete.setEstado(EstadoCohete.DISPONIBLE); //Como el cohete es reutilizable, lo ponemos disponible.
 			} else {
-				lineaBitacora(LocalDate.now() + ":Cohete retirado."); //Bitacora
+				lineaBitacora(LocalDate.now() + ": Cohete retirado."); //Bitacora
 				this.cohete.setEstado(EstadoCohete.RETIRADO); //Como el cohete no es reutilizable, lo retiramos.
 			}
 			
