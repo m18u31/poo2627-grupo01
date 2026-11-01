@@ -1,8 +1,11 @@
 package ucam.poo.mision.app;
 
+<<<<<<< Updated upstream
 import ucam.poo.mision.flota.*;
 import ucam.poo.mision.misiones.*;
 import ucam.poo.mision.tripulacion.*;
+=======
+>>>>>>> Stashed changes
 
 public class DemoConsola {
 	
@@ -60,6 +63,7 @@ public class DemoConsola {
 	
 	public static void main(String[] args) {
 		
+<<<<<<< Updated upstream
 		int i;
 		
 		Cohete cohete1 = new Cohete("SLS-00", "Delta IV", 1500.0, 3, false);
@@ -170,5 +174,7 @@ public class DemoConsola {
 			}
 			System.out.println(rocky6.getBitacora()[i]);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 }
