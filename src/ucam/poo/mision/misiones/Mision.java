@@ -17,10 +17,13 @@ public abstract class Mision {
 	private static final int MAX_LINEAS_BITACORA = 100;  //Numero maximo de lineas miestras se use un array (estatico)
 	private int indiceBitacora = 0; //Apunta por que linea va
 	private double masaTotal;
+	private final String prefijoCodigo = "MIS-";
+	private static int numCodigo=0;
 	
 	//Constructor
-	public Mision(String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas) {
-		this.codigo = codigo;
+	public Mision(String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas) {
+		this.setCodigo();
+		numCodigo++;
 		this.nombre = nombre;
 		this.tipo = tipo;
 		this.fechaLanzamiento = fechaLanzamiento;
@@ -29,7 +32,6 @@ public abstract class Mision {
 		this.estado = EstadoMision.planificada;
 		this.bitacora = new String[MAX_LINEAS_BITACORA]; //Bitacora creada
 		lineaBitacora(LocalDate.now() + ": Misión planificada."); //Primera linea
-		
 	}
 	
 	//Getters
@@ -70,13 +72,9 @@ public abstract class Mision {
 	}
 	
 	//Setters
-	public boolean setCodigo(String codigo) {
-		if(codigo != null && !codigo.isBlank()) {
-			this.codigo = codigo;
-			return true;
-		} else {
-			return false;
-		}
+	public boolean setCodigo() {
+		this.codigo = this.prefijoCodigo + numCodigo;
+		return true;
 	}
 	
 	public boolean setNombre(String nombre) {
@@ -151,13 +149,16 @@ public abstract class Mision {
 	}
 	
 	public double calcularMasaTotal() {
+		if(this.cargas == null) {
+			return 0.0;
+		}
 		int i;
 		double masaTotal=0;
-		for(i=0; i<cargas.length; i++) { //Recorremos las cargas
-			if(cargas[i] == null) { //Con el primer espacio nulo asumimos que ya no hay mas y salimos
-				return masaTotal;
+		for(i=0; i<this.cargas.length; i++) { //Recorremos las cargas
+			if(this.cargas[i] == null) { //Si no hay carga, se salta la iteracion
+				continue;
 			}
-			masaTotal = masaTotal + cargas[i].getMasa(); //Se van sumando
+			masaTotal = masaTotal + this.cargas[i].getMasa(); //Se van sumando
 		}
 		
 		return masaTotal;
@@ -167,13 +168,9 @@ public abstract class Mision {
 	//1. La masa total de lanzamiento de la misión no supera la capacidad máxima de carga del cohete.
 	public boolean seguridadMasas() {
 		if(this.masaTotal > cohete.getCapacidadCargaMaxima()) {
+			lineaBitacora(LocalDate.now() + ": (Seguridad) Exceso de masa."); //Bitacora
 			return false;
 		}
-		return true;
-	}
-	
-	//4. No viajan juntos dos astronautas incompatibles.
-	public boolean seguridadIncompatibles() { //TODO: Primero hay que entender como comparar objetos con equals y @Override
 		return true;
 	}
 	
@@ -182,13 +179,13 @@ public abstract class Mision {
 		if(this.cohete.getEstado() == EstadoCohete.DISPONIBLE) {
 			return true;
 		}
-		
+		lineaBitacora(LocalDate.now() + ": (Seguridad) Cohete no disponible."); //Bitacora
 		return false;
 	}
 	
 	//Comprobacion de todo
 	public boolean seguridadTotal() {
-		if(seguridadMasas() && seguridadIncompatibles() && seguridadCohete()) {
+		if(seguridadMasas() && seguridadCohete()) {
 			return true;
 		}
 		
@@ -212,7 +209,7 @@ public abstract class Mision {
 			return this.setEstado(EstadoMision.cancelada); //Mision cancelada
 		}
 		if(this.getEstado() == EstadoMision.lista) { //Una mision lista puede ser cancelada
-			lineaBitacora(LocalDate.now() + ":Cohete disponible."); //Bitacora
+			lineaBitacora(LocalDate.now() + ": Cohete disponible."); //Bitacora
 			this.cohete.setEstado(EstadoCohete.DISPONIBLE); //Cohete disponible
 			lineaBitacora(LocalDate.now() + ": Misión cancelada."); //Bitacora
 			return this.setEstado(EstadoMision.cancelada); //Mision cancelada
@@ -232,10 +229,10 @@ public abstract class Mision {
 		if(this.getEstado() == EstadoMision.lanzada) { //Solo una miion lanzada puede ser completada
 			lineaBitacora(LocalDate.now() + ": Misión completada."); //Bitacora
 			if(this.cohete.isReutilizable()) {
-				lineaBitacora(LocalDate.now() + ":Cohete disponible."); //Bitacora
+				lineaBitacora(LocalDate.now() + ": Cohete disponible."); //Bitacora
 				this.cohete.setEstado(EstadoCohete.DISPONIBLE); //Como el cohete es reutilizable, lo ponemos disponible.
 			} else {
-				lineaBitacora(LocalDate.now() + ":Cohete retirado."); //Bitacora
+				lineaBitacora(LocalDate.now() + ": Cohete retirado."); //Bitacora
 				this.cohete.setEstado(EstadoCohete.RETIRADO); //Como el cohete no es reutilizable, lo retiramos.
 			}
 			

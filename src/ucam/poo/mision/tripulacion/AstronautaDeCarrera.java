@@ -5,10 +5,8 @@ public class AstronautaDeCarrera extends Tripulante {
 	
 	
 	public AstronautaDeCarrera(String nombre, String apellido1, String apellido2, int anyoNacimiento, Especialidad especialidad,
-			String[] necesidades, Tripulante[] incompatibles, Tripulante[] preferentes, int horasVuelo,
-			int experienciaComputable, int misionesCompletadas) {
-		super(nombre, apellido1, apellido2, anyoNacimiento, especialidad, necesidades, incompatibles, preferentes, horasVuelo,
-				experienciaComputable);
+			String[] necesidades, Tripulante[] incompatibles, Tripulante[] preferentes, int horasVuelo, int misionesCompletadas) {
+		super(nombre, apellido1, apellido2, anyoNacimiento, especialidad, necesidades, incompatibles, preferentes, horasVuelo);
 		this.misionesCompletadas = misionesCompletadas;
 		// TODO Auto-generated constructor stub
 	}

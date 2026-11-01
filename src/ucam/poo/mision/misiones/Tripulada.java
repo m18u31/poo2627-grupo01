@@ -10,8 +10,8 @@ public class Tripulada extends Mision {
 	//Atributos
 	private Tripulante[] tripulacion;
 	
-	public Tripulada (String codigo, String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, double masaTotal, Tripulante[] tripulacion) {
-		super(codigo, nombre, tipo, fechaLanzamiento, cohete, cargas);
+	public Tripulada (String nombre, TipoMision tipo, String fechaLanzamiento, Cohete cohete, CargaUtil[] cargas, Tripulante[] tripulacion) {
+		super(nombre, tipo, fechaLanzamiento, cohete, cargas);
 		this.asignarTripulacion(tripulacion);
 		this.setMasaTotal(this.calcularMasaTotal()); //Calculo de masas propio sobrescrito con @Override
 	}
@@ -31,7 +31,7 @@ public class Tripulada extends Mision {
 		int i, contador=0;
 		for(i=0; i<tripulacion.length; i++){ //Recorremos y sumamos
 			if(tripulacion[i] == null) {
-				return contador;
+				continue;
 			}
 			contador++;
 		}
@@ -39,18 +39,21 @@ public class Tripulada extends Mision {
 	}
 	
 	//Asignacion de tripulacion
-	public void asignarTripulacion(Tripulante[] tripulacion) {
+	public boolean asignarTripulacion(Tripulante[] tripulacion) {
 		this.tripulacion = tripulacion;
 		this.lineaBitacora(LocalDate.now() + ": Tripulación asignada."); //Bitacora
+		return true;
 	}
 	
 	//Metodos de seguridad
 	//2. En una misión tripulada, el número de astronautas no supera las plazas del cohete.
 	public boolean seguridadAforo() {
 		if(this.tripulacion == null) {
+			lineaBitacora(LocalDate.now() + ": (Seguridad) Tripulación no asignada."); //Bitacora
 			return false;
 		}
 		if(this.calculaNumAstronautas(this.tripulacion) > this.getCohete().getPlazas()) {
+			lineaBitacora(LocalDate.now() + ": (Seguridad) Exceso de tripulación."); //Bitacora
 			return false;
 		}
 		return true;
@@ -64,6 +67,9 @@ public class Tripulada extends Mision {
 		
 		int i, coms=0, pils=0;
 		for(i=0; i<tripulacion.length; i++) {
+			if(tripulacion[i] == null) {
+				continue;
+			}
 			if(this.tripulacion[i].getEspecialidad() == Especialidad.COMANDANTE) {
 				coms++;
 			}
@@ -75,8 +81,69 @@ public class Tripulada extends Mision {
 		if(coms>0 && pils>0) {
 			return true;
 		}
-		
+		lineaBitacora(LocalDate.now() + ": (Seguridad) Faltan comandantes o pilotos."); //Bitacora
 		return false;
+	}
+	
+	//4. No viajan juntos dos astronautas incompatibles.
+	public boolean seguridadIncompatibles() { //TODO: Primero hay que entender como comparar objetos con equals y @Override
+		if(this.tripulacion == null) {
+			return false;
+		}
+		
+		if(listarIncompatibles() == null) {
+			return true;
+		}
+		
+		int i, j;
+		for(i=0; i<this.tripulacion.length; i++) {
+			for(j=0; j<listarIncompatibles().length; j++) {
+				if(tripulacion[i].equals(listarIncompatibles()[j])) {
+					lineaBitacora(LocalDate.now() + ": (Seguridad) Existen incompatibilidades en la tripulación."); //Bitacora
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public Tripulante[] listarIncompatibles() {
+		if(this.tripulacion == null) {
+			return null;
+		}
+		
+		Tripulante[] incompatibles = new Tripulante[contarIncompatibles()];
+		int i, j, contador=0;
+		for(i=0; i<tripulacion.length; i++) {
+			if(tripulacion[i] == null || tripulacion[i].getIncompatibles() == null) {
+				continue;
+			}
+			
+			for(j=0; j<tripulacion[i].getIncompatibles().length; j++) {
+				if(tripulacion[i].getIncompatibles()[j] == null) {
+					continue;
+				}
+				incompatibles[contador] = tripulacion[i].getIncompatibles()[j];
+				contador++;
+			}
+		}
+		
+		return incompatibles;
+	}
+	
+	public int contarIncompatibles() {
+		if(this.tripulacion == null) {
+			return 0;
+		}
+		
+		int i, contador=0;
+		for(i=0; i<this.tripulacion.length; i++) {
+			if(tripulacion[i] == null || tripulacion[i].getIncompatibles() == null) {
+				continue;
+			}
+			contador = contador + tripulacion[i].getIncompatibles().length;
+		}
+		return contador;
 	}
 	
 	//6. Toda misión tripulada incluye al menos un médico.
@@ -87,6 +154,9 @@ public class Tripulada extends Mision {
 			
 		int i, medicos=0;
 		for(i=0; i<tripulacion.length; i++) {
+			if(tripulacion[i] == null) {
+				continue;
+			}
 			if(this.tripulacion[i].getEspecialidad() == Especialidad.MEDICO) {
 				medicos++;
 			}
@@ -95,7 +165,7 @@ public class Tripulada extends Mision {
 		if(medicos>0) {
 			return true;
 		}
-		
+		lineaBitacora(LocalDate.now() + ": (Seguridad) Falta un medico."); //Bitacora
 		return false;
 	}
 	
@@ -103,7 +173,7 @@ public class Tripulada extends Mision {
 	@Override
 	public boolean seguridadTotal() {
 		//A lo comprobado en Mision, le añadimos tres sistemas de seguridad propios de Tripulada
-		if(super.seguridadTotal() && seguridadAforo() && seguridadComPil() && seguridadMedico()) {
+		if(super.seguridadTotal() && seguridadAforo() && seguridadComPil() && seguridadIncompatibles() && seguridadMedico()) {
 			return true;
 		}
 		
