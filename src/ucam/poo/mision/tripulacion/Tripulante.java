@@ -18,9 +18,8 @@ public abstract class Tripulante {
 	private Tripulante[] incompatibles;
 	private Tripulante[] preferentes;
 	private int horasVuelo;
-	private int experienciaComputable;
-	private final String prefijoID = "AST-";
-	private static int numID=0;
+	private final String prefijoId = "AST-";
+	private static int numId=0;
 	private String id;
 	
 		
@@ -154,26 +153,20 @@ public abstract class Tripulante {
 
 
 
-	public void setExperienciaComputable(int experienciaComputable) {
-		this.experienciaComputable = experienciaComputable;
+	
+	public int getnumId() {
+		return numId;
 	}
 
 
 
 
-	public String getID() {
-		return id;
+	private void setId() {
+		id = getPrefijoId() + getnumId();
 	}
 
-
-
-
-	private void setID() {
-		id = prefijoID + numID;
-	}
-
-	public String getPrefijoID() {
-		return prefijoID;
+	public String getPrefijoId() {
+		return prefijoId;
 	}
 
 	public String getId() {
@@ -194,8 +187,8 @@ public abstract class Tripulante {
 		this.incompatibles = incompatibles;
 		this.preferentes = preferentes;
 		this.horasVuelo = horasVuelo;
-		this.setID();
-		numID++;
+		this.setId();
+		numId++;
 		
 	}
 
